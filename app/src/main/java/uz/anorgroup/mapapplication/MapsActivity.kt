@@ -50,7 +50,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
-        setUpMap()
+        val destanation = LatLng(41.26465, 69.21627)
+        map.addMarker(MarkerOptions().position(destanation).title("Amir Temur"))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(destanation, 15f))
+
         map.setOnMapLongClickListener {
             if (listPoints.size == 2) {
                 listPoints.clear()
@@ -77,34 +80,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             polylineOptions.geodesic(true)
             map.addPolyline(polylineOptions)
         }.launchIn(lifecycleScope)
-    }
-
-    private fun setUpMap() {
-        val granted = PackageManager.PERMISSION_GRANTED
-        val task = fusedLocationProviderClient.lastLocation
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != granted &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != granted
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                0
-            )
-            map.isMyLocationEnabled = true
-            return
-        }
-
-        task.addOnSuccessListener {
-//            val yourCoordinate = LatLng(it.latitude, it.longitude)
-            val destanation = LatLng(41.26465, 69.21627)
-//            map.addMarker(MarkerOptions().position(yourCoordinate).title("You"))
-            map.addMarker(MarkerOptions().position(destanation).title("Amir Temur"))
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(destanation, 15f))
-        }
-
     }
 
 
